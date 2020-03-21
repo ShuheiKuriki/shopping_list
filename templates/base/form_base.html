@@ -1,0 +1,10 @@
+{% extends "base/logoned_base.html" %}
+{% block title2 %}{% block title3 %}{% endblock %}{% endblock %}
+
+{% block content %}
+    <h2>{% block h2 %}{% endblock %}</h2>
+    <form class='col-xl-6 col-md-8 col-lg-6 col-sm-12 mx-auto m-5' method="POST">
+        {% csrf_token %}
+        {% block form %}{% endblock%}
+    </form>
+{% endblock %}
