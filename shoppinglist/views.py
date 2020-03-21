@@ -55,7 +55,7 @@ class ShoppingListView(ListView):
 @method_decorator(login_required, name='dispatch')
 class ShoppingCreateView(CreateView):
     form_class = ShoppingForm
-    template_name = 'Shoppinglist/Shopping_create.html'
+    template_name = 'shoppinglist/shopping_create.html'
     success_url = reverse_lazy('shoppinglist:index')
 
     def form_valid(self, form):
