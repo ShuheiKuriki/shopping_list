@@ -11,6 +11,9 @@ class ShoppingForm(ModelForm):
         model = Shopping
         fields = ['name','shop','price','date']
         forms.CheckboxInput(attrs={'class': 'check'})
+        widgets = {
+            'date': DateInput(),
+        }
 
 class SortForm(forms.Form):
     keys = [('buy_or_not','購入済'),("shop",'店')]
