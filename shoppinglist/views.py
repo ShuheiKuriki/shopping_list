@@ -34,6 +34,12 @@ def buy(request,pk):
     shopping.save()
     return redirect('shoppinglist:index')
 
+def must_buy(request,pk):
+    shopping = Shopping.objects.get(id=pk)
+    shopping.buy_or_not = False
+    shopping.save()
+    return redirect('shoppinglist:index')
+
 @method_decorator(login_required, name='dispatch')
 class ShoppingListView(ListView):
     model = Shopping
