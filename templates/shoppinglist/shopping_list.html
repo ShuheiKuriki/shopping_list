@@ -2,17 +2,27 @@
 {% block title %}買い物リスト{% endblock %}
 {% block active_shoppinglist %}active{% endblock %}
 {% block content %}
-<form class='mt-4' method="POST" action="{% url 'shoppinglist:sort' %}">
+<form class='d-none d-md-block mx-4' method="POST" action="{% url 'shoppinglist:sort' %}">
   {% csrf_token %}
   {% for field in form %}
-    <span class='mr-3'>{{ field.label_tag }} {{ field }}</span>
+    <span class='mr-2'>{{ field.label_tag }} {{ field }}</span>
   {% endfor %}
   <button class="btn-sm btn-primary" type="submit">並び替え</button>
+  <a class='btn btn-warning' href="{% url 'shoppinglist:create' %}">商品追加</a>
 </form>
+<form class='d-block d-md-none' method="POST" action="{% url 'shoppinglist:sort' %}">
+  {% csrf_token %}
+  {% for field in form %}
+    <span class='mr-2'>{{ field.label_tag }} {{ field }}</span>
+  {% endfor %}
+  <button class="btn btn-primary" type="submit">並び替え</button>
+  <a class='btn btn-warning float-right' href="{% url 'shoppinglist:create' %}">商品追加</a>
+</form>
+
 {% endblock %}
 {% block content2 %}
 <!-- md -->
-    <table class='table text-center table-striped table-bordered d-none d-md-block'>
+    <table class='table text-center table-striped table-bordered d-none d-md-block mx-4'>
       <thead>
         <tr class='table-info'>
           <th scope='col'></th>
@@ -38,6 +48,46 @@
                 <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                 <ul class="dropdown-menu" role="menu">
                   {% if shopping.buy_or_not == True %}
+                    <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:must_buy' shopping.id %}">未購入にする</a></li>
+                  {% else %}
+                    <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
+                  {% endif %}
+                  <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:update' shopping.id %}">編集</a></li>
+                  <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:delete' shopping.id %}">削除</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+<!-- sm -->
+    <table class='table-sm text-center table-striped table-bordered d-none d-sm-block d-md-none'>
+      <thead>
+        <tr class='table-info'>
+          <th scope='col'>✔︎</th>
+          <th class='w-25' scope='col'>Item</th>
+          <th scope='col'>Shop</th>
+          <th scope='col'>Price</th>
+          <th scope='col'>Count</th>
+          <th scope='col'>Past</th>
+          <th scope='col'>Menu</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for shopping in shopping_list %}
+          <tr>
+            <td>{% if shopping.buy_or_not == True %}✔︎{% else %}{% endif %}</td>
+            <td>{{ shopping.name }}</td>
+            <td>{{ shopping.shop }}</td>
+            <td>{% if shopping.price != None %}¥{{ shopping.price }}{% endif %}</td>
+            <td></td>
+            <td>{% if shopping.days %}{{ shopping.days }}日{% endif %}</td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
+                <ul class="dropdown-menu" role="menu">
+                  {% if shopping.buy_or_not == True %}
                     <li><a class='btn btn-primary btn-block' href="{% url 'shoppinglist:must_buy' shopping.id %}">未購入にする</a></li>
                   {% else %}
                     <li><a class='btn btn-primary btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
@@ -51,22 +101,20 @@
         {% endfor %}
       </tbody>
     </table>
-    <!-- xs -->
-        <table class='table text-center table-sm table-striped table-bordered table-responsive d-block d-md-none'>
+<!-- xs -->
+        <table class='table text-center table-sm table-striped table-bordered table-responsive d-block d-sm-none'>
           <thead>
             <tr class='table-info'>
-              <th scope='col'></th>
               <th scope='col'>✔︎</th>
-              <th scope='col'>商品</th>
-              <th scope='col'>店</th>
-              <th scope='col'>価格</th>
-              <th scope='col'>メニュー</th>
+              <th scope='col'>Item</th>
+              <th scope='col'>Shop</th>
+              <th scope='col'>Price</th>
+              <th scope='col'>Menu</th>
             </tr>
           </thead>
           <tbody>
             {% for shopping in shopping_list %}
             <tr>
-              <th scope='row'>{{ forloop.counter }}</th>
               <td>{% if shopping.buy_or_not == True %}✔︎{% else %}{% endif %}</td>
               <td>{{ shopping.name }}</td>
               <td>{{ shopping.shop }}</td>
@@ -75,9 +123,13 @@
                 <div class="dropdown">
                   <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a class='btn btn-primary btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
-                    <li><a class='btn btn-primary btn-block my-1' href="{% url 'shoppinglist:update' shopping.id %}">編集</a></li>
-                    <li><a class='btn btn-primary btn-block' href="{% url 'shoppinglist:delete' shopping.id %}">削除</a></li>
+                    {% if shopping.buy_or_not == True %}
+                      <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:must_buy' shopping.id %}">未購入にする</a></li>
+                    {% else %}
+                      <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
+                    {% endif %}
+                    <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:update' shopping.id %}">編集</a></li>
+                    <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:delete' shopping.id %}">削除</a></li>
                   </ul>
                 </div>
               </td>

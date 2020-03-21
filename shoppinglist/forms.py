@@ -9,10 +9,10 @@ class DateInput(forms.DateInput):
 class ShoppingForm(ModelForm):
     class Meta:
         model = Shopping
-        fields = ['name','shop','price','date']
+        fields = ['name','shop','price','count','buy_date']
         forms.CheckboxInput(attrs={'class': 'check'})
         widgets = {
-            'date': DateInput(),
+            'buy_date': DateInput(),
         }
 
 class SortForm(forms.Form):
