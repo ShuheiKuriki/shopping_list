@@ -30,11 +30,6 @@
                     <a href="{% url 'shoppinglist:create' %}" class="nav-link">商品追加</a>
                 </li>
             </ul>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item {% block active_shoppinglist %}{% endblock %}">
-                    <a class="nav-link" href="{% url 'shoppinglist:index' %}">買い物リスト</a>
-                </li>
-            </ul>
             <ul class="navbar-nav">
               <li class="nav-item active">
                   <a href="{% url 'account_logout' %}" class="nav-link">ログアウト</a>

@@ -54,7 +54,7 @@
 <!-- sm -->
 {% for info in infos %}
   {% if info.num > 0 %}
-    <table class='table table-sm table-light text-center table-striped table-responsive d-none d-sm-block d-md-none'>
+    <table class='table table-sm table-light text-center table-striped d-none d-sm-block d-md-none'>
       <caption>{{info.name}} {{info.date}} : ¥{{info.total}}</caption>
       <thead class='col-12 thead-dark'>
         <tr class='col-12'>
@@ -95,7 +95,7 @@
 <!-- xs -->
 {% for info in infos %}
   {% if info.num > 0 %}
-        <table class='table table-light text-center table-striped table-sm table-responsive d-block d-sm-none'>
+        <table class='table table-light text-center table-striped table-sm d-block d-sm-none'>
           <caption>{{info.name}} {{info.date}} : ¥{{info.total}}</caption>
           <thead class='thead-dark col-12'>
             <tr class='col-12'>
@@ -114,7 +114,7 @@
               <td></td>
               <td>{% if shopping.price > 0 %}¥{{ shopping.price }} ×{{ shopping.count }}{% endif %}</td>
               <td>
-                <div class="dropdown">
+                <div class="dropleft">
                   <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
                   <ul class="dropdown-menu" role="menu">
                     {% if shopping.buy_or_not == True %}
