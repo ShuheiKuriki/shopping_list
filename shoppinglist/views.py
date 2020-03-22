@@ -15,18 +15,6 @@ import datetime
 
 # Create your views here.
 
-@login_required
-def index(request):
-    return redirect('shoppinglist:list',sort='buy_or_not')
-
-@login_required
-def sort(request):
-    if request.method == "POST":
-        s = request.POST.get('key')
-        return redirect('shoppinglist:list', sort=s)
-    else:
-        return redirect('shoppinglist:list', sort='buy_or_not')
-
 def buy(request,pk):
     shopping = Shopping.objects.get(id=pk)
     shopping.buy_or_not = True
@@ -40,23 +28,34 @@ def must_buy(request,pk):
     shopping.save()
     return redirect('shoppinglist:index')
 
-@method_decorator(login_required, name='dispatch')
-class ShoppingListView(ListView):
-    model = Shopping
-
-    def get_queryset(self):
-        key = self.kwargs['sort']
-        shoppings = Shopping.objects.filter(user=self.request.user).order_by(key)
+class Shoppinginfo:
+    def __init__(self, shoppings, name=""):
+        self.name = name
+        self.shoppings = shoppings
+        sum = 0
         for shopping in shoppings:
-            if shopping.date:
-                shopping.days = (datetime.date.today() - shopping.date).days
-                shopping.save()
-        return shoppings
+            sum += shopping.price * shopping.count
+            shopping.days = (datetime.date.today() - shopping.date).days
+            shopping.save()
+        self.total = sum
 
-    def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)  #テンプレートに渡すコンテキストに 「user_count」 という変数を追加
-            context['form'] = SortForm
-            return context
+def index(request):
+    shoppings = Shopping.objects.filter(user=request.user).order_by('shop')
+    past_shoppings = shoppings.filter(buy_date__lt=datetime.date.today())
+    for past_shopping in past_shoppings:
+        past_shopping.buy_date = datetime.date.today()
+        past_shopping.save()
+    not_buy = shoppings.filter(buy_or_not=False)
+    today = Shoppinginfo(name="今日",
+            shoppings=not_buy.filter(buy_date=datetime.date.today()))
+    tom = Shoppinginfo(name="明日",
+            shoppings=not_buy.filter(buy_date=datetime.date.today()+datetime.timedelta(days=1)))
+    other = Shoppinginfo(name="明日以降",
+            shoppings=not_buy.filter(buy_date__gt=datetime.date.today()+datetime.timedelta(days=1)))
+    bought = Shoppinginfo(name="購入済み",
+            shoppings=shoppings.filter(buy_or_not=True))
+    infos = [today, tom, other, bought]
+    return render(request, 'shoppinglist/shopping_list.html', {'infos':infos})
 
 @method_decorator(login_required, name='dispatch')
 class ShoppingCreateView(CreateView):

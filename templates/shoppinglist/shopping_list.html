@@ -2,46 +2,33 @@
 {% block title %}買い物リスト{% endblock %}
 {% block active_shoppinglist %}active{% endblock %}
 {% block content %}
-<form class='d-none d-md-block mx-4' method="POST" action="{% url 'shoppinglist:sort' %}">
-  {% csrf_token %}
-  {% for field in form %}
-    <span class='mr-2'>{{ field.label_tag }} {{ field }}</span>
-  {% endfor %}
-  <button class="btn-sm btn-primary" type="submit">並び替え</button>
-  <a class='btn btn-warning' href="{% url 'shoppinglist:create' %}">商品追加</a>
-</form>
-<form class='d-block d-md-none' method="POST" action="{% url 'shoppinglist:sort' %}">
-  {% csrf_token %}
-  {% for field in form %}
-    <span class='mr-2'>{{ field.label_tag }} {{ field }}</span>
-  {% endfor %}
-  <button class="btn btn-primary" type="submit">並び替え</button>
-  <a class='btn btn-warning float-right' href="{% url 'shoppinglist:create' %}">商品追加</a>
-</form>
-
+<a class='btn btn-warning d-none d-md-inline mx-4' href="{% url 'shoppinglist:create' %}">商品追加</a>
+<a class='btn btn-warning d-block d-sm-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
 {% endblock %}
 {% block content2 %}
 <!-- md -->
+{% for info in infos %}
+    <h4 class='d-none d-md-block mx-4 mt-2'>{{info.name}} : ¥{{info.total}}</h4>
     <table class='table text-center table-striped table-bordered d-none d-md-block mx-4'>
       <thead>
         <tr class='table-info'>
           <th scope='col'></th>
-          <th scope='col'>購入済</th>
           <th class="w-25" scope='col'>商品名</th>
           <th class="w-25" scope='col'>店</th>
           <th scope='col'>価格</th>
+          <th scope='col'>個数</th>
           <th scope='col'>経過日数</th>
-          <th scope='col'>メニュー</th>
+          <th class="float-right" scope='col'>メニュー</th>
         </tr>
       </thead>
       <tbody>
-        {% for shopping in shopping_list %}
+        {% for shopping in info.shoppings %}
           <tr>
             <th scope='row'>{{ forloop.counter }}</th>
-            <td>{% if shopping.buy_or_not == True %}✔︎{% else %}{% endif %}</td>
             <td>{{ shopping.name }}</td>
             <td>{{ shopping.shop }}</td>
-            <td>{% if shopping.price != None %}¥{{ shopping.price }}{% endif %}</td>
+            <td>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}</td>
+            <td>{{ shopping.count }}</td>
             <td>{% if shopping.days %}{{ shopping.days }}日{% endif %}</td>
             <td>
               <div class="dropdown">
@@ -61,27 +48,28 @@
         {% endfor %}
       </tbody>
     </table>
+{% endfor %}
 <!-- sm -->
+{% for info in infos %}
+    <h5 class='d-none d-sm-block d-md-none mt-2'>{{info.name}} : ¥{{info.total}}</h5>
     <table class='table-sm text-center table-striped table-bordered d-none d-sm-block d-md-none'>
       <thead>
         <tr class='table-info'>
-          <th scope='col'>✔︎</th>
           <th class='w-25' scope='col'>Item</th>
-          <th scope='col'>Shop</th>
+          <th class='w-25'　scope='col'>Shop</th>
           <th scope='col'>Price</th>
           <th scope='col'>Count</th>
           <th scope='col'>Past</th>
-          <th scope='col'>Menu</th>
+          <th class='w-25' scope='col'>Menu</th>
         </tr>
       </thead>
       <tbody>
-        {% for shopping in shopping_list %}
+        {% for shopping in info.shoppings %}
           <tr>
-            <td>{% if shopping.buy_or_not == True %}✔︎{% else %}{% endif %}</td>
             <td>{{ shopping.name }}</td>
             <td>{{ shopping.shop }}</td>
-            <td>{% if shopping.price != None %}¥{{ shopping.price }}{% endif %}</td>
-            <td></td>
+            <td>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}</td>
+            <td>{{ shopping.count }}</td>
             <td>{% if shopping.days %}{{ shopping.days }}日{% endif %}</td>
             <td>
               <div class="dropdown">
@@ -101,24 +89,27 @@
         {% endfor %}
       </tbody>
     </table>
+{% endfor %}
 <!-- xs -->
-        <table class='table text-center table-sm table-striped table-bordered table-responsive d-block d-sm-none'>
-          <thead>
-            <tr class='table-info'>
-              <th scope='col'>✔︎</th>
-              <th scope='col'>Item</th>
-              <th scope='col'>Shop</th>
+{% for info in infos %}
+        <table class='table table-light text-center table-sm table-striped table-responsive d-block d-sm-none'>
+          <caption>{{info.name}} : ¥{{info.total}}</caption>
+          <thead class='thead-dark'>
+            <tr class=''>
+              <th class='w-25' scope='col'>Item</th>
+              <th class='w-25' scope='col'>Shop</th>
               <th scope='col'>Price</th>
-              <th scope='col'>Menu</th>
+              <th scope='col'>×</th>
+              <th class='w-25' scope='col'>Menu</th>
             </tr>
           </thead>
           <tbody>
-            {% for shopping in shopping_list %}
+            {% for shopping in info.shoppings %}
             <tr>
-              <td>{% if shopping.buy_or_not == True %}✔︎{% else %}{% endif %}</td>
               <td>{{ shopping.name }}</td>
               <td>{{ shopping.shop }}</td>
-              <td>{% if shopping.price != None %}¥{{ shopping.price }}{% endif %}</td>
+              <td>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}</td>
+              <td>×{{ shopping.count }}</td>
               <td>
                 <div class="dropdown">
                   <button type="button" class="btn-xs btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span>menu</button>
@@ -137,4 +128,5 @@
             {% endfor %}
           </tbody>
         </table>
+{% endfor %}
 {% endblock %}
