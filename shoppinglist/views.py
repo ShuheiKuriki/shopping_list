@@ -12,13 +12,14 @@ from .forms import ShoppingForm, SortForm
 from .models import Shopping
 
 import datetime
+from datetime import date
 
 # Create your views here.
 
 def buy(request,pk):
     shopping = Shopping.objects.get(id=pk)
     shopping.buy_or_not = True
-    shopping.date = datetime.date.today()
+    shopping.date = date.today()
     shopping.save()
     return redirect('shoppinglist:index')
 
@@ -29,32 +30,39 @@ def must_buy(request,pk):
     return redirect('shoppinglist:index')
 
 class Shoppinginfo:
-    def __init__(self, shoppings, name=""):
+    def __init__(self, shoppings, name="",day=''):
         self.name = name
         self.shoppings = shoppings
+        self.num = len(shoppings)
+        if day=='':
+            self.date=''
+        else:
+            day_delta = date.today()+datetime.timedelta(days=day)
+            week_day = ['月', '火', '水','木','金','土','日']
+            self.date = "{}/{}({})".format(day_delta.month, day_delta.day, week_day[day_delta.weekday()])
         sum = 0
         for shopping in shoppings:
             if shopping.price is not None:
                 sum += shopping.price * shopping.count
             if shopping.date is not None:
-                shopping.days = (datetime.date.today() - shopping.date).days
+                shopping.days = (date.today() - shopping.date).days
             shopping.save()
         self.total = sum
 
 def index(request):
-    shoppings = Shopping.objects.filter(user=request.user).order_by('shop')
-    past_shoppings = shoppings.filter(buy_date__lt=datetime.date.today())
+    shoppings = Shopping.objects.filter(user=request.user)
+    past_shoppings = shoppings.filter(buy_date__lt=date.today())
     for past_shopping in past_shoppings:
-        past_shopping.buy_date = datetime.date.today()
+        past_shopping.buy_date = date.today()
         past_shopping.save()
     not_buy = shoppings.filter(buy_or_not=False)
-    today = Shoppinginfo(name="今日",
-            shoppings=not_buy.filter(buy_date=datetime.date.today()))
-    tom = Shoppinginfo(name="明日",
-            shoppings=not_buy.filter(buy_date=datetime.date.today()+datetime.timedelta(days=1)))
+    today = Shoppinginfo(name="今日", day=0,
+            shoppings=not_buy.filter(buy_date=date.today()).order_by('shop'))
+    tom = Shoppinginfo(name="明日", day=1,
+            shoppings=not_buy.filter(buy_date=date.today()+datetime.timedelta(days=1)).order_by('shop'))
     other = Shoppinginfo(name="明日以降",
-            shoppings=not_buy.filter(buy_date__gt=datetime.date.today()+datetime.timedelta(days=1)))
-    bought = Shoppinginfo(name="購入済み",
+            shoppings=not_buy.filter(buy_date__gt=date.today()+datetime.timedelta(days=1)).order_by('-date'))
+    bought = Shoppinginfo(name="過去に購入した商品",
             shoppings=shoppings.filter(buy_or_not=True))
     infos = [today, tom, other, bought]
     return render(request, 'shoppinglist/shopping_list.html', {'infos':infos})
