@@ -34,8 +34,10 @@ class Shoppinginfo:
         self.shoppings = shoppings
         sum = 0
         for shopping in shoppings:
-            sum += shopping.price * shopping.count
-            shopping.days = (datetime.date.today() - shopping.date).days
+            if shopping.price is not None:
+                sum += shopping.price * shopping.count
+            if shopping.date is not None:
+                shopping.days = (datetime.date.today() - shopping.date).days
             shopping.save()
         self.total = sum
 

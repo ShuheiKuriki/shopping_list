@@ -3,7 +3,7 @@
 {% block active_shoppinglist %}active{% endblock %}
 {% block content %}
 <a class='btn btn-warning d-none d-md-inline mx-4' href="{% url 'shoppinglist:create' %}">商品追加</a>
-<a class='btn btn-warning d-block d-sm-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
+<a class='btn btn-warning d-block d-md-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
 {% endblock %}
 {% block content2 %}
 <!-- md -->
@@ -51,16 +51,15 @@
 {% endfor %}
 <!-- sm -->
 {% for info in infos %}
-    <h5 class='d-none d-sm-block d-md-none mt-2'>{{info.name}} : ¥{{info.total}}</h5>
-    <table class='table-sm text-center table-striped table-bordered d-none d-sm-block d-md-none'>
-      <thead>
-        <tr class='table-info'>
+    <table class='table table-sm table-light text-center table-striped d-none d-sm-block d-md-none'>
+      <caption>{{info.name}} : ¥{{info.total}}</caption>
+      <thead class='thead-dark'>
+        <tr class=''>
           <th class='w-25' scope='col'>Item</th>
           <th class='w-25'　scope='col'>Shop</th>
           <th scope='col'>Price</th>
-          <th scope='col'>Count</th>
           <th scope='col'>Past</th>
-          <th class='w-25' scope='col'>Menu</th>
+          <th class='' scope='col'>Menu</th>
         </tr>
       </thead>
       <tbody>
@@ -68,8 +67,7 @@
           <tr>
             <td>{{ shopping.name }}</td>
             <td>{{ shopping.shop }}</td>
-            <td>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}</td>
-            <td>{{ shopping.count }}</td>
+            <td class='text-right'>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}　×{{ shopping.count }}</td>
             <td>{% if shopping.days %}{{ shopping.days }}日{% endif %}</td>
             <td>
               <div class="dropdown">
