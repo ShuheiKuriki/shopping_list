@@ -67,7 +67,7 @@
           <tr>
             <td>{{ shopping.name }}</td>
             <td>{{ shopping.shop }}</td>
-            <td class='text-right'>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}　×{{ shopping.count }}</td>
+            <td class='text-right'>{% if shopping.price > 0 %}¥{{ shopping.price }}{% endif %}　×{{ shopping.count }}</td>
             <td>{% if shopping.days %}{{ shopping.days }}日{% endif %}</td>
             <td>
               <div class="dropdown">
@@ -97,7 +97,7 @@
               <th class='w-25' scope='col'>Item</th>
               <th class='w-25' scope='col'>Shop</th>
               <th scope='col'>Price</th>
-              <th scope='col'>×</th>
+              <th scope='col'></th>
               <th class='w-25' scope='col'>Menu</th>
             </tr>
           </thead>
@@ -106,7 +106,7 @@
             <tr>
               <td>{{ shopping.name }}</td>
               <td>{{ shopping.shop }}</td>
-              <td>{% if shopping.price != 0 %}¥{{ shopping.price }}{% endif %}</td>
+              <td>{% if shopping.price > 0 %}¥{{ shopping.price }}{% endif %}</td>
               <td>×{{ shopping.count }}</td>
               <td>
                 <div class="dropdown">
