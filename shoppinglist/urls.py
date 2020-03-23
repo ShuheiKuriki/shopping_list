@@ -5,6 +5,7 @@ app_name = 'shoppinglist'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('set_default', views.set_default, name='set_default'),
     path('buy/<int:pk>', views.buy, name='buy'),
     path('must_buy/<int:pk>', views.must_buy, name='must_buy'),
     path('create', views.ShoppingCreateView.as_view(), name='create'),

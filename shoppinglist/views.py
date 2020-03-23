@@ -16,6 +16,13 @@ from datetime import date
 
 # Create your views here.
 
+def set_default(request):
+    shoppings = Shopping.objects.filter(user=request.user, buy_date=None)
+    for shopping in shoppings:
+        shopping.buy_date = date.today()
+        shopping.save()
+    return shoppings
+
 def buy(request,pk):
     shopping = Shopping.objects.get(id=pk)
     shopping.buy_or_not = True
