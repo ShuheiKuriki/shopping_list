@@ -21,7 +21,7 @@ def set_default(request):
     for shopping in shoppings:
         shopping.buy_date = date.today()
         shopping.save()
-    return shoppings
+    return HttpResponse('OK')
 
 def buy(request,pk):
     shopping = Shopping.objects.get(id=pk)
