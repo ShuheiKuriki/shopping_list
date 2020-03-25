@@ -5,7 +5,7 @@
   <div class="card card-default text-left">
     {% for key,value in info.items %}
       <div class="card-body">
-        {{key}} : {{ value|linebreaksbr }}
+        {{key}} : {% if value != None and value != 0 %} {{ value|linebreaksbr }} {% endif %}
       </div>
     {% endfor %}
     <div class="card-footer">

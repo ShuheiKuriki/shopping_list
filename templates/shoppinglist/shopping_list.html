@@ -39,6 +39,7 @@
                     <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:must_buy' shopping.id %}">購入リストに追加</a></li>
                   {% else %}
                     <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
+                    <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:not_buy' shopping.id %}">購入をやめる</a></li>
                   {% endif %}
                   <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:update' shopping.id %}">編集</a></li>
                   <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:delete' shopping.id %}">削除</a></li>
@@ -80,6 +81,7 @@
                     <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:must_buy' shopping.id %}">購入リストに追加</a></li>
                   {% else %}
                     <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
+                    <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:not_buy' shopping.id %}">購入をやめる</a></li>
                   {% endif %}
                   <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:update' shopping.id %}">編集</a></li>
                   <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:delete' shopping.id %}">削除</a></li>
@@ -121,6 +123,7 @@
                       <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:must_buy' shopping.id %}">購入リストに追加</a></li>
                     {% else %}
                       <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:buy' shopping.id %}">購入済みにする</a></li>
+                      <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:not_buy' shopping.id %}">購入をやめる</a></li>
                     {% endif %}
                     <li><a class='btn btn-info btn-block my-1' href="{% url 'shoppinglist:update' shopping.id %}">編集</a></li>
                     <li><a class='btn btn-info btn-block' href="{% url 'shoppinglist:delete' shopping.id %}">削除</a></li>
@@ -133,4 +136,10 @@
         </table>
   {% endif %}
 {% endfor %}
+{% endblock %}
+{% block content3 %}
+<a class='btn btn-warning d-none d-md-inline mx-4' href="{% url 'shoppinglist:create' %}">商品追加</a>
+<a class='btn btn-warning d-block d-md-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
+<a class='btn btn-success d-none d-md-inline m-4' href="{% url 'account_logout' %}">ログアウト</a>
+<a class='btn btn-success d-block d-md-none my-4' href="{% url 'account_logout' %}">ログアウト</a>
 {% endblock %}

@@ -36,6 +36,12 @@ def must_buy(request,pk):
     shopping.save()
     return redirect('shoppinglist:index')
 
+def not_buy(request,pk):
+    shopping = Shopping.objects.get(id=pk)
+    shopping.buy_or_not = True
+    shopping.save()
+    return redirect('shoppinglist:index')
+
 class Shoppinginfo:
     def __init__(self, shoppings, name="",day=''):
         self.name = name
