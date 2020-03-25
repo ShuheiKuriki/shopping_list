@@ -97,7 +97,7 @@
 <!-- xs -->
 {% for info in infos %}
   {% if info.num > 0 %}
-        <table class='table table-light text-center table-striped table-sm d-block d-sm-none'>
+        <table class='table table-light table-responsive text-center table-striped table-sm d-block d-sm-none'>
           <caption>{{info.name}} {{info.date}} : ¥{{info.total}}</caption>
           <thead class='thead-dark col-12'>
             <tr class='col-12'>
@@ -140,6 +140,4 @@
 {% block content3 %}
 <a class='btn btn-warning d-none d-md-inline mx-4' href="{% url 'shoppinglist:create' %}">商品追加</a>
 <a class='btn btn-warning d-block d-md-none' href="{% url 'shoppinglist:create' %}">商品追加</a>
-<a class='btn btn-success d-none d-md-inline m-4' href="{% url 'account_logout' %}">ログアウト</a>
-<a class='btn btn-success d-block d-md-none my-4' href="{% url 'account_logout' %}">ログアウト</a>
 {% endblock %}

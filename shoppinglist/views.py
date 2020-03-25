@@ -74,9 +74,9 @@ def index(request):
     tom = Shoppinginfo(name="明日", day=1,
             shoppings=not_buy.filter(buy_date=date.today()+datetime.timedelta(days=1)).order_by('shop'))
     other = Shoppinginfo(name="明日以降",
-            shoppings=not_buy.filter(buy_date__gt=date.today()+datetime.timedelta(days=1)).order_by('-date'))
+            shoppings=not_buy.filter(buy_date__gt=date.today()+datetime.timedelta(days=1)).order_by('shop'))
     bought = Shoppinginfo(name="過去に購入した商品",
-            shoppings=shoppings.filter(buy_or_not=True))
+            shoppings=shoppings.filter(buy_or_not=True).order_by('-date'))
     infos = [today, tom, other, bought]
     return render(request, 'shoppinglist/shopping_list.html', {'infos':infos})
 
