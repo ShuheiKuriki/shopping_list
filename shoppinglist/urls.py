@@ -11,5 +11,5 @@ urlpatterns = [
     path('not_buy/<int:pk>', views.not_buy, name='not_buy'),
     path('create', views.ShoppingCreateView.as_view(), name='create'),
     path('<int:pk>/update', views.ShoppingUpdateView.as_view(), name='update'),
-    path('<int:pk>/delete', views.ShoppingDeleteView.as_view(), name='delete'),
+    path('<int:pk>/delete', views.delete, name='delete'),
 ]

@@ -1,10 +1,11 @@
 # Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.decorators.http import require_POST
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 from django.conf import settings
 
@@ -96,17 +97,8 @@ class ShoppingUpdateView(UpdateView):
     form_class = ShoppingForm
     success_url = reverse_lazy('shoppinglist:index')
 
-@method_decorator(login_required, name='dispatch')
-class ShoppingDeleteView(DeleteView):
-    model = Shopping
-    success_url = reverse_lazy('shoppinglist:index')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        meta_fields = Shopping._meta.get_fields()
-        dic = {}
-        for field in meta_fields:
-            if field.name != 'id' and field.name != 'user':
-                exec('dic[field.verbose_name]=context["object"].{}'.format(field.name))
-        context['info'] = dic
-        return context
+@require_POST
+def delete(request,pk):
+    shopping = get_object_or_404(Shopping, pk=pk)
+    shopping.delete()
+    return redirect('shoppinglist:index')
